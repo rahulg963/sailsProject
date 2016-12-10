@@ -7,14 +7,18 @@
 
 module.exports = {
   find: function(req, res) {
+    sails.log("File : [SearchController.js] Function : [find]");
     var nameVal = req.param('query')
+    sails.log("File : [SearchController.js] Function : [find] Query : " + nameVal);
     async.parallel({
       one : function(callback){
         sails.models.university.find({name: nameVal}).populate('courses')
           .exec(function (err, university) {
             if(err){
+              sails.log("File : [SearchController.js] Function : [find] Error Occurred " + err);
               callback(err,"NULL");
             }else {
+              sails.log("File : [SearchController.js] Function : [find] university");
               callback(null, university);
             }
           });
@@ -23,17 +27,21 @@ module.exports = {
         sails.models.course.find({ name: nameVal }).populate('owner')
           .exec(function (err, course) {
             if(err){
+              sails.log("File : [SearchController.js] Function : [find] Error Occurred " + err);
              callback(err,"NULL");
             }else {
+              sails.log("File : [SearchController.js] Function : [find] course");
               callback(null, course);
             }
           });
       }
     }, function(err, results){
       if(err){
+        sails.log("File : [SearchController.js] Function : [find] Error Occurred " + err);
         res.json({error_msg : err});
       }
       else {
+        sails.log("File : [SearchController.js] Function : [find] Callback Return ");
         res.json({
           university_list : results.one,
           course_list : results.two
