@@ -12,7 +12,7 @@ module.exports = {
     sails.log("File : [SearchController.js] Function : [find] Query : " + nameVal);
     async.parallel({
       one : function(callback){
-        sails.models.university.find({name: nameVal}).populate('courses')
+        sails.models.university.find({where : {name: { contains :  nameVal }}}).populate('courses')
           .exec(function (err, university) {
             if(err){
               sails.log("File : [SearchController.js] Function : [find] Error Occurred " + err);
@@ -24,7 +24,7 @@ module.exports = {
           });
       },
       two : function(callback){
-        sails.models.course.find({ name: nameVal }).populate('owner')
+        sails.models.course.find({where : {name: { contains :  nameVal }}}).populate('owner')
           .exec(function (err, course) {
             if(err){
               sails.log("File : [SearchController.js] Function : [find] Error Occurred " + err);
